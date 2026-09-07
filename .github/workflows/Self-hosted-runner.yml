@@ -1,0 +1,27 @@
+name: 34 - Self-hosted Runners
+
+on: workflow_dispatch
+
+permissions:
+  contents: read
+
+jobs:
+  on-my-machine:
+    # Change these labels to match a runner you registered. As written, this
+    # job will wait until a [self-hosted, linux, x64] runner is available.
+    runs-on: [self-hosted, linux, x64]
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Show where we are running
+        run: |
+          echo "Runner name : $RUNNER_NAME"
+          echo "Runner OS   : $RUNNER_OS"
+          echo "This is MY hardware — inside my network, with my tools."
+          echo "Unlike a hosted runner, nothing here is wiped after the job."
+
+      - name: Clean up after yourself (self-hosted runners persist!)
+        if: always()
+        run: |
+          echo "On a persistent runner, tidy build output so the next job"
+          echo "starts from a known state (or run jobs inside a container)."
